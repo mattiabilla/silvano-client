@@ -56,7 +56,7 @@ export default {
 	  modalClasse:false,
 	  
 	  nuovaClasse:{
-		id:"",
+		
 		nome:"",
 		materia:"",
 		anno:"",
@@ -64,27 +64,7 @@ export default {
 		
 	  },
       classi:[
-        {
-    		  id:"7982347",
-			  nome:"5d",
-    		  materia:"info",
-    		  anno:"2016/2017",
-			  colore:"primary"
-    		},
-    		{
-			  id:"798237",
-    		  nome:"4f",
-    		  materia:"ing",
-    		  anno:"2015/2016",
-			  colore:"secondary"
-    		},
-    		{
-			  id:"793452347",
-    		  nome:"2c",
-    		  materia:"ita",
-    		  anno:"2017/2018",
-			  colore:"tertiary"
-    		}
+        
     	  ],
 
 
@@ -101,11 +81,40 @@ export default {
 
 	aggiungi(cla){
 		if(this.nuovaClasse.nome !="" && this.nuovaClasse.materia !="" && this.nuovaClasse.anno !="" ){
-			this.nuovaClasse.id=Math.floor((Math.random() * 1000000) + 1);
+			var dati=JSON.stringify(this.nuovaClasse);
+			dati=JSON.parse(dati);
+			console.log(dati);
+			this.$axios({
+				  method:'POST',
+				  url:'http://localhost/teach',
+				  responseType:'json',
+				  headers: { 'content-type': 'application/x-www-form-urlencoded' },
+				  data:new URLSearchParams(dati)
+				}).then((response) => {
+					console.log(response);
+					this.loadData();
+					this.nuovaClasse={
+		
+						nome:"",
+						materia:"",
+						anno:"",
+						colore:"primary"
+						
+					  };
+				  })
+				  .catch(() => {
+					this.$q.notify({
+					  color: 'negative',
+					  position: 'top',
+					  message: 'Loading failed',
+					  icon: 'report_problem'
+					})
+				  })
+			  	;
 			
-			this.classi.push(this.nuovaClasse);	
+			
 			this.modalClasse=false;
-			this.$q.notify({message:'Classe aggiunta', type: 'positive',color: 'positive'});
+			
 		}else{
 			 this.$q.notify('Inserisci tutti i campi!');
 		}
@@ -135,8 +144,30 @@ export default {
 		
 		this.$q.notify({message:'Classe eliminata', type: 'positive',color: 'positive'});
 		
-    }
-  }
+    },
+	loadData () {
+		this.$axios({
+		  method:'get',
+		  url:'http://localhost/teach',
+		  responseType:'json'
+		}).then((response) => {
+			console.log(response);
+			this.classi=response.data.classi;
+		  })
+		  .catch(() => {
+			this.$q.notify({
+			  color: 'negative',
+			  position: 'top',
+			  message: 'Loading failed',
+			  icon: 'report_problem'
+			})
+		  })
+	  }	,
+	
+	} , 
+	created(){
+		this.loadData()
+	  }
 }
 </script>
 
