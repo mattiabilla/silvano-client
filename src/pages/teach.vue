@@ -134,15 +134,37 @@ export default {
             })
           },
 	eliminadef(id) {
+		var dati={"id":id};
+		var prova=new URLSearchParams(dati);
 		
+		this.$axios({
+				  method:'DELETE',
+				  url:'http://localhost/teach',
+				  responseType:'json',
+				  headers: { 'content-type': 'application/x-www-form-urlencoded' },
+				  data:new URLSearchParams(dati)
+				}).then((response) => {
+					console.log(response);
+					this.loadData();
+					this.$q.notify({message:'Classe eliminata', type: 'positive',color: 'positive'});
+				  })
+				  .catch((error) => {
+					console.log(error);
+					this.$q.notify({
+					  color: 'negative',
+					  position: 'top',
+					  message: 'Loading failed',
+					  icon: 'report_problem'
+					})
+				  })
+			  	;
 	
-        console.log(this.classi);
-		var removeIndex = this.classi.map(function(item) { return item.id; }).indexOf(id);
+	
+        
 
-		// remove object
-		this.classi.splice(removeIndex, 1);
 		
-		this.$q.notify({message:'Classe eliminata', type: 'positive',color: 'positive'});
+		
+		
 		
     },
 	loadData () {
