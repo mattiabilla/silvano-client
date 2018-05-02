@@ -24,7 +24,7 @@
 				<div class="layout-padding">
 				  <q-input v-model="nuovaClasse.nome" float-label="Nome" class="q-mt-md" />
 				  <q-input v-model="nuovaClasse.materia" float-label="Materia"  class="q-mt-md"/>
-				  <q-input v-model="nuovaClasse.anno" float-label="Anno"  class="q-mt-md"/>
+				  <q-input v-model="nuovaClasse.anno" float-label="Anno" type="number" class="q-mt-md"/>
 				 
 				  <q-btn color="primary" @click="aggiungi()" class="q-mt-md q-mr-sm ">Submit</q-btn>
 				</div>
